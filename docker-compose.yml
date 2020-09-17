@@ -1,0 +1,29 @@
+version: '2.1'
+
+services:
+  knote:
+    image: fabricio211/knote-java:latest
+    mem_limit: 350m
+    networks:
+      - minharede
+    depends_on:
+      - mongo
+    ports:
+    - 8080:8080
+  mongo:
+    image: mongo:3.6.9
+    mem_limit: 350m
+    networks:
+      - minharede
+    ports:
+      - "27017:27017"
+    command: mongod --smallfiles
+    healthcheck:
+      test: "mongo --eval 'db.stats().ok'"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+networks:
+  minharede:
+    name: minharede
